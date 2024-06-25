@@ -1,0 +1,5 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/edbfe467-5107-43fc-a895-a4b94c3dccf6/resourceGroups/rg-munson-eastus-dev-001/providers/Microsoft.Web/sites/TalentDevelopersFront",
+  "appService.deploySubpath": ".",
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
+}
