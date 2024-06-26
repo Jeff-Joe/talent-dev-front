@@ -86,7 +86,7 @@ function EditProduct({ name, price, endpoint, rowId, getItems }) {
 
 EditProduct.propTypes = {
   name: PropTypes.string,
-  price: PropTypes.string,
+  price: PropTypes.number,
   endpoint: PropTypes.string,
   rowId: PropTypes.number,
   getItems: PropTypes.func,

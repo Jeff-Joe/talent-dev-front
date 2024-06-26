@@ -55,7 +55,7 @@ const GetSales = ({ endpoint }) => {
     return (
       <>
         <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled margin>
+        <Table celled>
           <TableHeader>
             <TableRow>
               <TableHeaderCell>Id</TableHeaderCell>

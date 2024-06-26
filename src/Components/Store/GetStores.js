@@ -56,7 +56,7 @@ const GetStores = ({ endpoint }) => {
     return (
       <>
         <CreateStore getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled margin>
+        <Table celled>
           <TableHeader>
             <TableRow>
               {columns.map((item, i) => (

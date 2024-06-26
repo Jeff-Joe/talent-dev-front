@@ -4,7 +4,13 @@ import PropTypes from "prop-types";
 import { Dropdown } from "semantic-ui-react";
 
 const DropdownMenu = ({ endpoint, handleInput, placeholder }) => {
-  const [items, setItems] = useState();
+  const [items, setItems] = useState([
+    {
+      key: "",
+      text: "",
+      value: "",
+    },
+  ]);
 
   useEffect(() => getItems(), []);
 

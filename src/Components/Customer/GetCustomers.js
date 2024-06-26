@@ -56,7 +56,7 @@ const GetCustomers = ({ endpoint }) => {
     return (
       <>
         <CreateCustomer getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled margin>
+        <Table celled>
           <TableHeader>
             <TableRow>
               {columns.map((item, i) => (
