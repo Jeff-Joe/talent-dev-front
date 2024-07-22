@@ -33,32 +33,27 @@ function EditSale({
   });
 
   const handleInputDate = (event) => {
-    console.log(event.target.value);
     event.preventDefault();
     let formattedDate = event.target.value.replaceAll("/", "-");
     setItem({ ...item, dateSold: formattedDate });
   };
 
   const handleInputCustomer = (event, data) => {
-    console.log(data.value);
     event.preventDefault();
     setItem({ ...item, customerId: data.value });
   };
 
   const handleInputProduct = (event, data) => {
-    console.log(data.value);
     event.preventDefault();
     setItem({ ...item, productId: data.value });
   };
 
   const handleInputStore = (event, data) => {
-    console.log(data.value);
     event.preventDefault();
     setItem({ ...item, storeId: data.value });
   };
 
   const isDateValid = (dateStr) => {
-    console.log(!isNaN(new Date(dateStr)));
     return !isNaN(new Date(dateStr));
   };
 
@@ -70,7 +65,6 @@ function EditSale({
       await axios
         .put(endpoint + "/" + rowId, item)
         .then((res) => {
-          console.log("Form submitted successfully!");
           console.log(res);
           setError(false);
           getItems();

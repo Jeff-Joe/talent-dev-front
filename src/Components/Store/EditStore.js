@@ -23,7 +23,6 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
   const handleInput = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
-    console.log(name, value);
     setItem({ ...item, [name]: value });
   };
 
@@ -35,7 +34,6 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
         console.log(res + "Edited successfully!");
       })
       .catch((err) => {
-        console.log(item);
         console.log(err);
       });
   };

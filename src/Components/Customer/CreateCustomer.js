@@ -21,7 +21,6 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
   const handleInput = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log(name, value);
     setItem({ ...item, [name]: value });
   };
 
@@ -29,8 +28,6 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
     await axios
       .post(endpoint, item)
       .then((res) => {
-        console.log("Form submitted successfully!");
-        console.log(res);
         setItem({ name: "", address: "" });
         getItemsFunc();
       })
