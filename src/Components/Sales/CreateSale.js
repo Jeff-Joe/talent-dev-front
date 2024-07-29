@@ -64,8 +64,12 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
           });
           setError(false);
           getItemsFunc();
+          if (isDateValid(item.dateSold)) setOpen(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          if (isDateValid(item.dateSold)) setOpen(false);
+        });
     }
   };
   return (
@@ -135,10 +139,7 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
           content="Create"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await handleSubmit();
-            if (isDateValid(item.dateSold)) setOpen(false);
-          }}
+          onClick={handleSubmit}
           positive
         />
       </ModalActions>

@@ -30,8 +30,12 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
       .then((res) => {
         setItem({ name: "", price: "" });
         getItemsFunc();
+        setOpen(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setOpen(false);
+      });
   };
   return (
     <Modal
@@ -61,10 +65,7 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
           content="Create"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await handleSubmit();
-            setOpen(false);
-          }}
+          onClick={handleSubmit}
           positive
         />
       </ModalActions>
