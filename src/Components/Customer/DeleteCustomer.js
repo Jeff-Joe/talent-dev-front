@@ -14,10 +14,13 @@ import {
 const DeleteCustomer = ({ endpoint, rowId, getItems }) => {
   const [open, setOpen] = useState(false);
 
-  const deleteRow = async (id) => {
+  const deleteRow = async () => {
     await axios
-      .delete(`${endpoint}/${id}`)
-      .then(() => getItems())
+      .delete(`${endpoint}/${rowId}`)
+      .then(() => {
+        getItems();
+        setOpen(false);
+      })
       .catch((error) => console.log(error));
   };
   return (
@@ -44,10 +47,7 @@ const DeleteCustomer = ({ endpoint, rowId, getItems }) => {
           content="Delete"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await deleteRow(rowId);
-            setOpen(false);
-          }}
+          onClick={deleteRow}
           positive
         />
       </ModalActions>
