@@ -14,10 +14,8 @@ import {
 
 const CreateCustomer = ({ endpoint, getItemsFunc }) => {
   const [open, setOpen] = useState(false);
-  const [item, setItem] = useState({
-    name: "",
-    address: "",
-  });
+  const [error, setError] = useState({ Address: [""], Name: [""] });
+  const [item, setItem] = useState({ name: "", address: "" });
   const { enqueueSnackbar } = useSnackbar();
 
   const handleInput = (event) => {
@@ -31,15 +29,22 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
       .post(endpoint, item)
       .then(() => {
         setItem({ name: "", address: "" });
+        setError({ Address: [""], Name: [""] });
+        setOpen(false);
         enqueueSnackbar("Store created successfully!");
         getItemsFunc();
-        setOpen(false);
       })
       .catch((err) => {
-        console.log(err);
-        setOpen(false);
+        setError(err.response.data.errors);
       });
   };
+
+  const handleCancel = async () => {
+    setOpen(false);
+    setError({ Address: [""], Name: [""] });
+    setItem({ name: "", address: "" });
+  };
+
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -53,15 +58,17 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
           <FormField>
             <label>Name</label>
             <input name="name" value={item.name} onChange={handleInput} />
+            {error.Name && <p className="red">{error.Name[0]}</p>}
           </FormField>
           <FormField>
             <label>Address</label>
             <input name="address" value={item.address} onChange={handleInput} />
+            {error.Address && <p className="red">{error.Address[0]}</p>}
           </FormField>
         </Form>
       </ModalContent>
       <ModalActions>
-        <Button color="black" onClick={() => setOpen(false)}>
+        <Button color="black" onClick={handleCancel}>
           Cancel
         </Button>
         <Button

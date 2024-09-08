@@ -14,6 +14,7 @@ import {
 
 function EditProduct({ name, price, endpoint, rowId, getItems }) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState({ Price: [""], Name: [""] });
   const [item, setItem] = useState({
     id: rowId,
     name: name,
@@ -43,8 +44,18 @@ function EditProduct({ name, price, endpoint, rowId, getItems }) {
         getItems();
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.response.data.errors);
       });
+  };
+
+  const handleCancel = async () => {
+    setItem({
+      id: rowId,
+      name: name,
+      price: price,
+    });
+    setError({ Price: [""], Name: [""] });
+    setOpen(false);
   };
 
   return (
@@ -65,15 +76,17 @@ function EditProduct({ name, price, endpoint, rowId, getItems }) {
           <FormField>
             <label>Name</label>
             <input name="name" value={item.name} onChange={handleInput} />
+            {error.Name && <p className="red">{error.Name[0]}</p>}
           </FormField>
           <FormField>
             <label>Price</label>
             <input name="price" value={item.price} onChange={handleInput} />
+            {error.Price && <p className="red">{error.Price[0]}</p>}
           </FormField>
         </Form>
       </ModalContent>
       <ModalActions>
-        <Button color="black" onClick={() => setOpen(false)}>
+        <Button color="black" onClick={handleCancel}>
           Cancel
         </Button>
         <Button

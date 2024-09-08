@@ -14,10 +14,8 @@ import {
 
 const CreateProduct = ({ endpoint, getItemsFunc }) => {
   const [open, setOpen] = useState(false);
-  const [item, setItem] = useState({
-    name: "",
-    price: "",
-  });
+  const [error, setError] = useState({ Price: [""], Name: [""] });
+  const [item, setItem] = useState({ name: "", price: "" });
   const { enqueueSnackbar } = useSnackbar();
 
   const handleInput = (event) => {
@@ -31,15 +29,22 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
       .post(endpoint, item)
       .then(() => {
         setItem({ name: "", price: "" });
+        setError({ Price: [""], Name: [""] });
+        setOpen(false);
         enqueueSnackbar("Product created successfully!");
         getItemsFunc();
-        setOpen(false);
       })
       .catch((err) => {
-        console.log(err);
-        setOpen(false);
+        setError(err.response.data.errors);
       });
   };
+
+  const handleCancel = async () => {
+    setOpen(false);
+    setError({ Price: [""], Name: [""] });
+    setItem({ name: "", price: "" });
+  };
+
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -53,15 +58,17 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
           <FormField>
             <label>Name</label>
             <input name="name" value={item.name} onChange={handleInput} />
+            {error.Name && <p className="red">{error.Name[0]}</p>}
           </FormField>
           <FormField>
             <label>Price</label>
             <input name="price" value={item.price} onChange={handleInput} />
+            {error.Price && <p className="red">{error.Price[0]}</p>}
           </FormField>
         </Form>
       </ModalContent>
       <ModalActions>
-        <Button color="black" onClick={() => setOpen(false)}>
+        <Button color="black" onClick={handleCancel}>
           Cancel
         </Button>
         <Button
