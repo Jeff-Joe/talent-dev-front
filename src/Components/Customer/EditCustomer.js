@@ -14,6 +14,7 @@ import {
 
 function EditCustomer({ name, address, endpoint, rowId, getItems }) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState({ Address: [""], Name: [""] });
   const [item, setItem] = useState({
     id: rowId,
     name: name,
@@ -43,8 +44,18 @@ function EditCustomer({ name, address, endpoint, rowId, getItems }) {
         getItems();
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.response.data.errors);
       });
+  };
+
+  const handleCancel = async () => {
+    setItem({
+      id: rowId,
+      name: name,
+      address: address,
+    });
+    setError({ Address: [""], Name: [""] });
+    setOpen(false);
   };
 
   return (
@@ -65,15 +76,17 @@ function EditCustomer({ name, address, endpoint, rowId, getItems }) {
           <FormField>
             <label>Name</label>
             <input name="name" value={item.name} onChange={handleInput} />
+            {error.Name && <p className="red">{error.Name[0]}</p>}
           </FormField>
           <FormField>
             <label>Address</label>
             <input name="address" value={item.address} onChange={handleInput} />
+            {error.Address && <p className="red">{error.Address[0]}</p>}
           </FormField>
         </Form>
       </ModalContent>
       <ModalActions>
-        <Button color="black" onClick={() => setOpen(false)}>
+        <Button color="black" onClick={handleCancel}>
           Cancel
         </Button>
         <Button
