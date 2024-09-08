@@ -15,6 +15,10 @@ const DeleteStore = ({ endpoint, rowId, getItems }) => {
   const [open, setOpen] = useState(false);
 
   const deleteRow = async () => {
+    if (rowId === 0) {
+      setOpen(false);
+      return;
+    }
     await axios
       .delete(`${endpoint}/${rowId}`)
       .then(() => {
@@ -23,6 +27,7 @@ const DeleteStore = ({ endpoint, rowId, getItems }) => {
       })
       .catch((error) => console.log(error));
   };
+  
   return (
     <Modal
       onClose={() => setOpen(false)}

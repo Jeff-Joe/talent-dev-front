@@ -25,7 +25,6 @@ const DropdownMenu = ({ endpoint, handleInput, placeholder }) => {
         }));
         setItems(itemsArray);
       })
-      .then(() => console.log(items))
       .catch((err) => console.log(err));
   };
 
