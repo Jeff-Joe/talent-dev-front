@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 import DropdownMenu from "./DropdownMenu";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -21,6 +22,7 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
     storeId: "",
     dateSold: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleInputDate = (event) => {
     event.preventDefault();
@@ -54,14 +56,14 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
     } else {
       await axios
         .post(endpoint, item)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           setItem({
             productId: "",
             customerId: "",
             storeId: "",
             dateSold: "",
           });
+          enqueueSnackbar("Sale created successfully!");
           setError(false);
           getItemsFunc();
           if (isDateValid(item.dateSold)) setOpen(false);

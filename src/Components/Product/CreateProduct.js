@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 import axios from "axios";
 import PropTypes from "prop-types";
 import {
@@ -17,6 +18,7 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
     name: "",
     price: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleInput = (event) => {
     event.preventDefault();
@@ -27,8 +29,9 @@ const CreateProduct = ({ endpoint, getItemsFunc }) => {
   const handleSubmit = async () => {
     await axios
       .post(endpoint, item)
-      .then((res) => {
+      .then(() => {
         setItem({ name: "", price: "" });
+        enqueueSnackbar("Product created successfully!");
         getItemsFunc();
         setOpen(false);
       })
