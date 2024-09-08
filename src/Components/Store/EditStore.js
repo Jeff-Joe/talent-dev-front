@@ -27,11 +27,20 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
   };
 
   const handleSubmit = async () => {
+    if (!rowId) {
+      setItem({
+        id: rowId,
+        name: name,
+        address: address,
+      });
+      setOpen(false);
+      return;
+    }
     await axios
       .put(endpoint + "/" + rowId, item)
       .then((res) => {
+        setOpen(false);
         getItems();
-        console.log(res + "Edited successfully!");
       })
       .catch((err) => {
         console.log(err);
@@ -71,10 +80,7 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
           content="Edit"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await handleSubmit();
-            setOpen(false);
-          }}
+          onClick={handleSubmit}
           positive
         />
       </ModalActions>

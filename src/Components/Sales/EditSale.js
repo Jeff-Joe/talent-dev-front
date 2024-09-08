@@ -62,10 +62,21 @@ function EditSale({
       setError(true);
       return;
     } else {
+      if (!rowId) {
+        setItem({
+          id: rowId,
+          productId: product.id,
+          customerId: customer.id,
+          storeId: store.id,
+          dateSold: dateSold,
+        });
+        setOpen(false);
+        return;
+      }
       await axios
         .put(endpoint + "/" + rowId, item)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          setOpen(false);
           setError(false);
           getItems();
         })
@@ -138,10 +149,7 @@ function EditSale({
           content="Edit"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await handleSubmit();
-            if (isDateValid(item.dateSold)) setOpen(false);
-          }}
+          onClick={handleSubmit}
           positive
         />
       </ModalActions>

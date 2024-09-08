@@ -27,9 +27,19 @@ function EditProduct({ name, price, endpoint, rowId, getItems }) {
   };
 
   const handleSubmit = async () => {
+    if (!rowId) {
+      setItem({
+        id: rowId,
+        name: name,
+        price: price,
+      });
+      setOpen(false);
+      return;
+    }
     await axios
       .put(endpoint + "/" + rowId, item)
-      .then((res) => {
+      .then(() => {
+        setOpen(false);
         getItems();
       })
       .catch((err) => {
@@ -70,10 +80,7 @@ function EditProduct({ name, price, endpoint, rowId, getItems }) {
           content="Edit"
           labelPosition="right"
           icon="checkmark"
-          onClick={async () => {
-            await handleSubmit();
-            setOpen(false);
-          }}
+          onClick={handleSubmit}
           positive
         />
       </ModalActions>
