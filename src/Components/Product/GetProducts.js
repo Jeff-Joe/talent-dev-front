@@ -19,6 +19,7 @@ const GetProducts = ({ endpoint }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -36,10 +37,11 @@ const GetProducts = ({ endpoint }) => {
             return element.charAt(0).toUpperCase() + element.slice(1);
           });
           setColumns(cols);
+          setError("");
         }
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.message);
       });
   };
 
@@ -54,10 +56,10 @@ const GetProducts = ({ endpoint }) => {
         <h1>No Items Found</h1>
       </>
     );
-
   } else {
     return (
       <>
+        {error && <p className="red">{error}</p>}
         <CreateProduct getItemsFunc={getItems} endpoint={endpoint} />
         <Table celled>
           <TableHeader>
@@ -91,6 +93,7 @@ const GetProducts = ({ endpoint }) => {
                       endpoint={endpoint}
                       rowId={item.id}
                       getItems={getItems}
+                      setError={setError}
                     />
                   </TableCell>
                 </TableRow>

@@ -18,6 +18,7 @@ import {
 const GetSales = ({ endpoint }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -31,10 +32,11 @@ const GetSales = ({ endpoint }) => {
         if (Array.isArray(res.data)) {
           setItems(res.data);
           setLoading(false);
+          setError("");
         }
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.message);
       });
   };
 
@@ -59,6 +61,7 @@ const GetSales = ({ endpoint }) => {
   } else {
     return (
       <>
+        {error && <p className="red">{error}</p>}
         <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
         <Table celled>
           <TableHeader>
@@ -98,6 +101,7 @@ const GetSales = ({ endpoint }) => {
                       endpoint={endpoint}
                       rowId={item.id}
                       getItems={getItems}
+                      setError={setError}
                     />
                   </TableCell>
                 </TableRow>

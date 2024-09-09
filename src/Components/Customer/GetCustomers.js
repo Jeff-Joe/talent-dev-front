@@ -19,6 +19,7 @@ const GetCustomers = ({ endpoint }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -36,10 +37,11 @@ const GetCustomers = ({ endpoint }) => {
             return element.charAt(0).toUpperCase() + element.slice(1);
           });
           setColumns(cols);
+          setError("");
         }
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.message);
       });
   };
 
@@ -57,6 +59,7 @@ const GetCustomers = ({ endpoint }) => {
   } else {
     return (
       <>
+        {error && <p className="red">{error}</p>}
         <CreateCustomer getItemsFunc={getItems} endpoint={endpoint} />
         <Table celled>
           <TableHeader>
@@ -90,6 +93,7 @@ const GetCustomers = ({ endpoint }) => {
                       endpoint={endpoint}
                       rowId={item.id}
                       getItems={getItems}
+                      setError={setError}
                     />
                   </TableCell>
                 </TableRow>

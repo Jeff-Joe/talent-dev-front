@@ -11,7 +11,7 @@ import {
   Icon,
 } from "semantic-ui-react";
 
-const DeleteCustomer = ({ endpoint, rowId, getItems }) => {
+const DeleteCustomer = ({ endpoint, rowId, getItems, setError }) => {
   const [open, setOpen] = useState(false);
 
   const deleteRow = async () => {
@@ -25,7 +25,9 @@ const DeleteCustomer = ({ endpoint, rowId, getItems }) => {
         getItems();
         setOpen(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setError("Something went wrong while deleting item" + error.message);
+      });
   };
 
   return (
@@ -64,6 +66,7 @@ DeleteCustomer.propTypes = {
   endpoint: PropTypes.string,
   rowId: PropTypes.number.isRequired,
   getItems: PropTypes.func,
+  setError: PropTypes.func,
 };
 
 export default DeleteCustomer;
