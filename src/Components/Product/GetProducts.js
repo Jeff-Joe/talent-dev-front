@@ -54,6 +54,7 @@ const GetProducts = ({ endpoint }) => {
         <h1>No Items Found</h1>
       </>
     );
+
   } else {
     return (
       <>
@@ -62,7 +63,7 @@ const GetProducts = ({ endpoint }) => {
           <TableHeader>
             <TableRow>
               {columns.map((item, i) => (
-                <TableHeaderCell key={i + 1}>{item}</TableHeaderCell>
+                <TableHeaderCell key={i}>{item}</TableHeaderCell>
               ))}
               <TableHeaderCell>Actions</TableHeaderCell>
               <TableHeaderCell>Actions</TableHeaderCell>
@@ -72,7 +73,7 @@ const GetProducts = ({ endpoint }) => {
           <TableBody>
             {items.map((item, i) => {
               return (
-                <TableRow key={i + 1}>
+                <TableRow key={i}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>${item.price}</TableCell>

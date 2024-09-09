@@ -18,12 +18,14 @@ const DropdownMenu = ({ endpoint, handleInput, placeholder }) => {
     axios
       .get(endpoint)
       .then((res) => {
-        let itemsArray = res.data.map((item) => ({
-          key: item.id,
-          text: item.name,
-          value: item.id,
-        }));
-        setItems(itemsArray);
+        if (Array.isArray(res.data)) {
+          let itemsArray = res.data.map((item) => ({
+            key: item.id,
+            text: item.name,
+            value: item.id,
+          }));
+          setItems(itemsArray);
+        }
       })
       .catch((err) => console.log(err));
   };

@@ -39,6 +39,9 @@ const GetSales = ({ endpoint }) => {
   };
 
   const formatDate = (date) => {
+    if (!date) {
+      return "Could not find date";
+    }
     return new Date(date).toString().slice(0, 15);
   };
 
@@ -73,7 +76,7 @@ const GetSales = ({ endpoint }) => {
           <TableBody>
             {items.map((item, i) => {
               return (
-                <TableRow key={i + 1}>
+                <TableRow key={i}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.product.name}</TableCell>
                   <TableCell>{item.customer.name}</TableCell>
