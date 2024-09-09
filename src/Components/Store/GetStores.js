@@ -29,12 +29,14 @@ const GetStores = ({ endpoint }) => {
     axios
       .get(endpoint)
       .then((res) => {
-        setLoading(false);
-        setItems(res.data);
-        let cols = Object.keys(res.data[0]).map((element) => {
-          return element.charAt(0).toUpperCase() + element.slice(1);
-        });
-        setColumns(cols);
+        if (Array.isArray(res.data)) {
+          setLoading(false);
+          setItems(res.data);
+          let cols = Object.keys(res.data[0]).map((element) => {
+            return element.charAt(0).toUpperCase() + element.slice(1);
+          });
+          setColumns(cols);
+        }
       })
       .catch((err) => {
         console.log(err);

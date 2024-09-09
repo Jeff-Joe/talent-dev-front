@@ -28,8 +28,10 @@ const GetSales = ({ endpoint }) => {
     axios
       .get(endpoint)
       .then((res) => {
-        setItems(res.data);
-        setLoading(false);
+        if (Array.isArray(res.data)) {
+          setItems(res.data);
+          setLoading(false);
+        }
       })
       .catch((err) => {
         console.log(err);
