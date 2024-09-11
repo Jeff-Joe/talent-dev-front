@@ -45,67 +45,71 @@ const GetProducts = ({ endpoint }) => {
       });
   };
 
-  if (loading) {
-    return <Button loading>Loading</Button>;
-  }
+  const createTable = () => {
+    if (loading) {
+      return <Button loading>Loading</Button>;
+    }
 
-  if (items.length <= 0) {
-    return (
-      <>
-        <CreateProduct getItemsFunc={getItems} endpoint={endpoint} />
-        <h1>No Items Found</h1>
-      </>
-    );
-  } else {
-    return (
-      <>
-        {error && <p className="red">{error}</p>}
-        <CreateProduct getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled>
-          <TableHeader>
-            <TableRow>
-              {columns.map((item, i) => (
-                <TableHeaderCell key={i}>{item}</TableHeaderCell>
-              ))}
-              <TableHeaderCell>Actions</TableHeaderCell>
-              <TableHeaderCell>Actions</TableHeaderCell>
-            </TableRow>
-          </TableHeader>
+    if (items.length <= 0) {
+      return (
+        <>
+          <CreateProduct getItemsFunc={getItems} endpoint={endpoint} />
+          <h1>No Items Found</h1>
+        </>
+      );
+    } else {
+      return (
+        <>
+          {error && <p className="red">{error}</p>}
+          <CreateProduct getItemsFunc={getItems} endpoint={endpoint} />
+          <Table celled>
+            <TableHeader>
+              <TableRow>
+                {columns.map((item, i) => (
+                  <TableHeaderCell key={i}>{item}</TableHeaderCell>
+                ))}
+                <TableHeaderCell>Actions</TableHeaderCell>
+                <TableHeaderCell>Actions</TableHeaderCell>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            {items.map((item, i) => {
-              return (
-                <TableRow key={i}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>${item.price}</TableCell>
-                  <TableCell>
-                    <EditProduct
-                      name={item.name}
-                      price={item.price}
-                      endpoint={endpoint}
-                      rowId={item.id}
-                      getItems={getItems}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <DeleteProduct
-                      endpoint={endpoint}
-                      rowId={item.id}
-                      getItems={getItems}
-                      setError={setError}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+            <TableBody>
+              {items.map((item, i) => {
+                return (
+                  <TableRow key={i}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>${item.price}</TableCell>
+                    <TableCell>
+                      <EditProduct
+                        name={item.name}
+                        price={item.price}
+                        endpoint={endpoint}
+                        rowId={item.id}
+                        getItems={getItems}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <DeleteProduct
+                        endpoint={endpoint}
+                        rowId={item.id}
+                        getItems={getItems}
+                        setError={setError}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
 
-          <TableFooter></TableFooter>
-        </Table>
-      </>
-    );
-  }
+            <TableFooter></TableFooter>
+          </Table>
+        </>
+      );
+    }
+  };
+
+  return <>{createTable()}</>;
 };
 
 GetProducts.propTypes = {

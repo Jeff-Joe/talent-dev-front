@@ -47,73 +47,77 @@ const GetSales = ({ endpoint }) => {
     return new Date(date).toString().slice(0, 15);
   };
 
-  if (loading) {
-    return <Button loading>Loading</Button>;
-  }
+  const createTable = () => {
+    if (loading) {
+      return <Button loading>Loading</Button>;
+    }
 
-  if (items.length <= 0) {
-    return (
-      <>
-        <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
-        <h1>No Items Found</h1>
-      </>
-    );
-  } else {
-    return (
-      <>
-        {error && <p className="red">{error}</p>}
-        <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>Id</TableHeaderCell>
-              <TableHeaderCell>Product</TableHeaderCell>
-              <TableHeaderCell>Customer</TableHeaderCell>
-              <TableHeaderCell>Store</TableHeaderCell>
-              <TableHeaderCell>DateSold</TableHeaderCell>
-              <TableHeaderCell>Actions</TableHeaderCell>
-              <TableHeaderCell>Actions</TableHeaderCell>
-            </TableRow>
-          </TableHeader>
+    if (items.length <= 0) {
+      return (
+        <>
+          <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
+          <h1>No Items Found</h1>
+        </>
+      );
+    } else {
+      return (
+        <>
+          {error && <p className="red">{error}</p>}
+          <CreateSale getItemsFunc={getItems} endpoint={endpoint} />
+          <Table celled>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Id</TableHeaderCell>
+                <TableHeaderCell>Product</TableHeaderCell>
+                <TableHeaderCell>Customer</TableHeaderCell>
+                <TableHeaderCell>Store</TableHeaderCell>
+                <TableHeaderCell>DateSold</TableHeaderCell>
+                <TableHeaderCell>Actions</TableHeaderCell>
+                <TableHeaderCell>Actions</TableHeaderCell>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            {items.map((item, i) => {
-              return (
-                <TableRow key={i}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.product.name}</TableCell>
-                  <TableCell>{item.customer.name}</TableCell>
-                  <TableCell>{item.store.name}</TableCell>
-                  <TableCell>{formatDate(item.dateSold)}</TableCell>
-                  <TableCell>
-                    <EditSale
-                      rowId={item.id}
-                      product={item.product}
-                      customer={item.customer}
-                      store={item.store}
-                      dateSold={item.dateSold}
-                      endpoint={endpoint}
-                      getItems={getItems}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <DeleteSale
-                      endpoint={endpoint}
-                      rowId={item.id}
-                      getItems={getItems}
-                      setError={setError}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+            <TableBody>
+              {items.map((item, i) => {
+                return (
+                  <TableRow key={i}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.product.name}</TableCell>
+                    <TableCell>{item.customer.name}</TableCell>
+                    <TableCell>{item.store.name}</TableCell>
+                    <TableCell>{formatDate(item.dateSold)}</TableCell>
+                    <TableCell>
+                      <EditSale
+                        rowId={item.id}
+                        product={item.product}
+                        customer={item.customer}
+                        store={item.store}
+                        dateSold={item.dateSold}
+                        endpoint={endpoint}
+                        getItems={getItems}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <DeleteSale
+                        endpoint={endpoint}
+                        rowId={item.id}
+                        getItems={getItems}
+                        setError={setError}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
 
-          <TableFooter></TableFooter>
-        </Table>
-      </>
-    );
-  }
+            <TableFooter></TableFooter>
+          </Table>
+        </>
+      );
+    }
+  };
+
+  return <>{createTable()}</>;
 };
 
 GetSales.propTypes = {

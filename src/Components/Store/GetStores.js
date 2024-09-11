@@ -45,67 +45,71 @@ const GetStores = ({ endpoint }) => {
       });
   };
 
-  if (loading) {
-    return <Button loading>Loading</Button>;
-  }
+  const createTable = () => {
+    if (loading) {
+      return <Button loading>Loading</Button>;
+    }
 
-  if (items.length <= 0) {
-    return (
-      <>
-        <CreateStore getItemsFunc={getItems} endpoint={endpoint} />
-        <h1>No Items Found</h1>
-      </>
-    );
-  } else {
-    return (
-      <>
-        {error && <p className="red">{error}</p>}
-        <CreateStore getItemsFunc={getItems} endpoint={endpoint} />
-        <Table celled>
-          <TableHeader>
-            <TableRow>
-              {columns.map((item, i) => (
-                <TableHeaderCell key={i}>{item}</TableHeaderCell>
-              ))}
-              <TableHeaderCell>Actions</TableHeaderCell>
-              <TableHeaderCell>Actions</TableHeaderCell>
-            </TableRow>
-          </TableHeader>
+    if (items.length <= 0) {
+      return (
+        <>
+          <CreateStore getItemsFunc={getItems} endpoint={endpoint} />
+          <h1>No Items Found</h1>
+        </>
+      );
+    } else {
+      return (
+        <>
+          {error && <p className="red">{error}</p>}
+          <CreateStore getItemsFunc={getItems} endpoint={endpoint} />
+          <Table celled>
+            <TableHeader>
+              <TableRow>
+                {columns.map((item, i) => (
+                  <TableHeaderCell key={i}>{item}</TableHeaderCell>
+                ))}
+                <TableHeaderCell>Actions</TableHeaderCell>
+                <TableHeaderCell>Actions</TableHeaderCell>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            {items.map((item, i) => {
-              return (
-                <TableRow key={i}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.address}</TableCell>
-                  <TableCell>
-                    <EditStore
-                      name={item.name}
-                      address={item.address}
-                      endpoint={endpoint}
-                      rowId={item.id}
-                      getItems={getItems}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <DeleteStore
-                      endpoint={endpoint}
-                      rowId={item.id}
-                      getItems={getItems}
-                      setError={setError}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+            <TableBody>
+              {items.map((item, i) => {
+                return (
+                  <TableRow key={i}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.address}</TableCell>
+                    <TableCell>
+                      <EditStore
+                        name={item.name}
+                        address={item.address}
+                        endpoint={endpoint}
+                        rowId={item.id}
+                        getItems={getItems}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <DeleteStore
+                        endpoint={endpoint}
+                        rowId={item.id}
+                        getItems={getItems}
+                        setError={setError}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
 
-          <TableFooter></TableFooter>
-        </Table>
-      </>
-    );
-  }
+            <TableFooter></TableFooter>
+          </Table>
+        </>
+      );
+    }
+  };
+
+  return <>{createTable()}</>;
 };
 
 GetStores.propTypes = {
