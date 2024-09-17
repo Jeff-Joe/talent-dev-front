@@ -18,8 +18,38 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
   const [item, setItem] = useState({ name: "", address: "" });
   const { enqueueSnackbar } = useSnackbar();
 
+  const validateName = (item) => {
+    if (!item.trim()) {
+      setError({ ...error, Name: ["Please enter a name"] });
+    } else if (item.trim().length > 255 || item.trim().length < 2) {
+      setError({
+        ...error,
+        Name: ["The name must contain between 2 and 255 characters"],
+      });
+    } else {
+      setError({ ...error, Name: [""] });
+    }
+  };
+
+  const validateAddress = (item) => {
+    if (item.trim().length > 1000 || item.trim().length < 2) {
+      setError({
+        ...error,
+        Address: ["The address must contain between 2 and 255 characters"],
+      });
+    } else {
+      setError({ ...error, Address: [""] });
+    }
+  };
+
   const handleInput = (event) => {
     event.preventDefault();
+    if (event.target.name === "name") {
+      validateName(event.target.value);
+    }
+    if (event.target.name === "address") {
+      validateAddress(event.target.value);
+    }
     const { name, value } = event.target;
     setItem({ ...item, [name]: value });
   };
