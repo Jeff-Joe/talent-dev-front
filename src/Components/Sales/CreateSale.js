@@ -153,6 +153,11 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
           icon="checkmark"
           onClick={handleSubmit}
           positive
+          disabled={
+            error.Date || error.Product || error.Customer || error.Store
+              ? true
+              : false
+          }
         />
       </ModalActions>
     </Modal>
