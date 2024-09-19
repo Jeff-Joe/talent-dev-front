@@ -14,7 +14,10 @@ import {
 
 const CreateCustomer = ({ endpoint, getItemsFunc }) => {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState({ Address: [""], Name: [""] });
+  const [error, setError] = useState({
+    Address: ["Please enter an address"],
+    Name: ["Please enter a name"],
+  });
   const [item, setItem] = useState({ name: "", address: "" });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -32,10 +35,12 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
   };
 
   const validateAddress = (item) => {
-    if (item.trim().length > 1000 || item.trim().length < 2) {
+    if (!item.trim()) {
+      setError({ ...error, Address: ["Please enter an address"] });
+    } else if (item.trim().length > 1000 || item.trim().length < 2) {
       setError({
         ...error,
-        Address: ["The address must contain between 2 and 255 characters"],
+        Address: ["The address must contain between 2 and 1000 characters"],
       });
     } else {
       setError({ ...error, Address: [""] });
@@ -107,6 +112,7 @@ const CreateCustomer = ({ endpoint, getItemsFunc }) => {
           icon="checkmark"
           onClick={handleSubmit}
           positive
+          disabled={error.Address[0] || error.Name[0] ? true : false}
         />
       </ModalActions>
     </Modal>

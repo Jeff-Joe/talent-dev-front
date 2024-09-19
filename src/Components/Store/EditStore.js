@@ -21,8 +21,40 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
     address: address,
   });
 
+  const validateName = (item) => {
+    if (!item.trim()) {
+      setError({ ...error, Name: ["Please enter a name"] });
+    } else if (item.trim().length > 255 || item.trim().length < 2) {
+      setError({
+        ...error,
+        Name: ["The name must contain between 2 and 255 characters"],
+      });
+    } else {
+      setError({ ...error, Name: [""] });
+    }
+  };
+
+  const validateAddress = (item) => {
+    if (!item.trim()) {
+      setError({ ...error, Address: ["Please enter an address"] });
+    } else if (item.trim().length > 1000 || item.trim().length < 2) {
+      setError({
+        ...error,
+        Address: ["The address must contain between 2 and 1000 characters"],
+      });
+    } else {
+      setError({ ...error, Address: [""] });
+    }
+  };
+
   const handleInput = (e) => {
     e.preventDefault();
+    if (e.target.name === "name") {
+      validateName(e.target.value);
+    }
+    if (e.target.name === "address") {
+      validateAddress(e.target.value);
+    }
     const { name, value } = e.target;
     setItem({ ...item, [name]: value });
   };
@@ -95,6 +127,7 @@ function EditStore({ name, address, endpoint, rowId, getItems }) {
           icon="checkmark"
           onClick={handleSubmit}
           positive
+          disabled={error.Address[0] || error.Name[0] ? true : false}
         />
       </ModalActions>
     </Modal>
