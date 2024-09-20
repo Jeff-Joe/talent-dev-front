@@ -3,6 +3,8 @@ import { useSnackbar } from "notistack";
 import DropdownMenu from "./DropdownMenu";
 import axios from "axios";
 import PropTypes from "prop-types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   ModalHeader,
   ModalContent,
@@ -15,7 +17,12 @@ import {
 
 const CreateSale = ({ endpoint, getItemsFunc }) => {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    Date: "Please select a date",
+    Product: "Please select a product",
+    Customer: "Please select a customer",
+    Store: "Please select a store",
+  });
   const [item, setItem] = useState({
     productId: "",
     customerId: "",
@@ -24,55 +31,68 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
   });
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleInputDate = (event) => {
-    event.preventDefault();
-    let formattedDate = event.target.value.replaceAll("/", "-");
-    setItem({ ...item, dateSold: formattedDate });
+  const handleInputDate = (date) => {
+    setItem({ ...item, dateSold: date });
+    setError({ ...error, Date: "" });
   };
 
   const handleInputCustomer = (event, data) => {
     event.preventDefault();
     setItem({ ...item, customerId: data.value });
+    setError({ ...error, Customer: "" });
   };
 
   const handleInputProduct = (event, data) => {
     event.preventDefault();
     setItem({ ...item, productId: data.value });
+    setError({ ...error, Product: "" });
   };
 
   const handleInputStore = (event, data) => {
     event.preventDefault();
     setItem({ ...item, storeId: data.value });
+    setError({ ...error, Store: "" });
   };
 
-  const isDateValid = (dateStr) => {
-    return !isNaN(new Date(dateStr));
+  const handleCancel = () => {
+    setItem({
+      productId: "",
+      customerId: "",
+      storeId: "",
+      dateSold: "",
+    });
+    setError({
+      Date: "Please select a date",
+      Product: "Please select a product",
+      Customer: "Please select a customer",
+      Store: "Please select a store",
+    });
+    setOpen(false);
   };
 
   const handleSubmit = async () => {
-    if (!isDateValid(item.dateSold)) {
-      setError(true);
-      return;
-    } else {
-      await axios
-        .post(endpoint, item)
-        .then(() => {
-          setItem({
-            productId: "",
-            customerId: "",
-            storeId: "",
-            dateSold: "",
-          });
-          enqueueSnackbar("Sale created successfully!");
-          setError(false);
-          getItemsFunc();
-          if (isDateValid(item.dateSold)) setOpen(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          if (isDateValid(item.dateSold)) setOpen(false);
+    await axios
+      .post(endpoint, item)
+      .then(() => {
+        setItem({
+          productId: "",
+          customerId: "",
+          storeId: "",
+          dateSold: "",
         });
-    }
+        enqueueSnackbar("Sale created successfully!");
+        setError({
+          Date: "Please select a date",
+          Product: "Please select a product",
+          Customer: "Please select a customer",
+          Store: "Please select a store",
+        });
+        getItemsFunc();
+        setOpen(false);
+      })
+      .catch((err) => {
+        setError(err.response.data.errors);
+      });
   };
   return (
     <Modal
@@ -86,14 +106,13 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
         <Form>
           <FormField>
             <label>Date sold</label>
-            <input
-              type="text"
-              placeholder="YYYY/MM/DD"
-              onChange={handleInputDate}
+            <DatePicker
+              selected={item.dateSold}
+              onChange={(date) => {
+                handleInputDate(date);
+              }}
             />
-            {error && (
-              <p className="red">Please enter a date in format YYYY/MM/DD</p>
-            )}
+            {error.Date && <p className="red">{error.Date}</p>}
           </FormField>
           <FormField>
             <label>Product</label>
@@ -102,6 +121,7 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
               handleInput={handleInputProduct}
               placeholder="Select a product"
             />
+            {error.Product && <p className="red">{error.Product}</p>}
           </FormField>
           <FormField>
             <label>Customer</label>
@@ -110,6 +130,7 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
               handleInput={handleInputCustomer}
               placeholder="Select a customer"
             />
+            {error.Customer && <p className="red">{error.Customer}</p>}
           </FormField>
           <FormField>
             <label>Store</label>
@@ -118,23 +139,12 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
               handleInput={handleInputStore}
               placeholder="Select a store"
             />
+            {error.Store && <p className="red">{error.Store}</p>}
           </FormField>
         </Form>
       </ModalContent>
       <ModalActions>
-        <Button
-          color="black"
-          onClick={() => {
-            setItem({
-              productId: "",
-              customerId: "",
-              storeId: "",
-              dateSold: "",
-            });
-            setError(false);
-            setOpen(false);
-          }}
-        >
+        <Button color="black" onClick={handleCancel}>
           Cancel
         </Button>
         <Button
@@ -143,6 +153,11 @@ const CreateSale = ({ endpoint, getItemsFunc }) => {
           icon="checkmark"
           onClick={handleSubmit}
           positive
+          disabled={
+            error.Date || error.Product || error.Customer || error.Store
+              ? true
+              : false
+          }
         />
       </ModalActions>
     </Modal>

@@ -2,6 +2,8 @@ import { useState } from "react";
 import DropdownMenu from "./DropdownMenu";
 import axios from "axios";
 import PropTypes from "prop-types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   ModalHeader,
   ModalContent,
@@ -32,10 +34,8 @@ function EditSale({
     dateSold: dateSold,
   });
 
-  const handleInputDate = (event) => {
-    event.preventDefault();
-    let formattedDate = event.target.value.replaceAll("/", "-");
-    setItem({ ...item, dateSold: formattedDate });
+  const handleInputDate = (date) => {
+    setItem({ ...item, dateSold: date });
   };
 
   const handleInputCustomer = (event, data) => {
@@ -53,35 +53,28 @@ function EditSale({
     setItem({ ...item, storeId: data.value });
   };
 
-  const isDateValid = (dateStr) => {
-    return !isNaN(new Date(dateStr));
-  };
-
   const handleSubmit = async () => {
-    if (!isDateValid(item.dateSold)) {
-      setError(true);
+    if (!rowId) {
+      setItem({
+        id: rowId,
+        productId: product.id,
+        customerId: customer.id,
+        storeId: store.id,
+        dateSold: dateSold,
+      });
+      setOpen(false);
       return;
-    } else {
-      if (!rowId) {
-        setItem({
-          id: rowId,
-          productId: product.id,
-          customerId: customer.id,
-          storeId: store.id,
-          dateSold: dateSold,
-        });
-        setOpen(false);
-        return;
-      }
-      await axios
-        .put(endpoint + "/" + rowId, item)
-        .then(() => {
-          setOpen(false);
-          setError(false);
-          getItems();
-        })
-        .catch((err) => console.log(err));
     }
+    await axios
+      .put(endpoint + "/" + rowId, item)
+      .then(() => {
+        setOpen(false);
+        setError(false);
+        getItems();
+      })
+      .catch((err) => {
+        setError(err.response.data.errors);
+      });
   };
   return (
     <Modal
@@ -98,16 +91,15 @@ function EditSale({
       <ModalHeader>Edit Sale</ModalHeader>
       <ModalContent>
         <Form>
+          {error && <p className="red">{error}</p>}
           <FormField>
             <label>Date sold</label>
-            <input
-              type="text"
-              value={item.dateSold.slice(0, 10).replaceAll("-", "/")}
-              onChange={handleInputDate}
+            <DatePicker
+              selected={item.dateSold}
+              onChange={(date) => {
+                handleInputDate(date);
+              }}
             />
-            {error && (
-              <p className="red">Please enter a date in format YYYY/MM/DD</p>
-            )}
           </FormField>
           <FormField>
             <label>Product</label>
